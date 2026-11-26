@@ -118,8 +118,12 @@ export default function App() {
       <div className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         {/* ============ ARCADE HEADER ============ */}
         <header className="pt-8 text-center sm:pt-12">
-          <div className="mb-3 inline-flex items-center gap-3 font-arcade text-[0.65rem] text-rust tracking-wider">
-            <span className="animate-blink text-ember">●</span> UNE CRÉATION DE <span className="text-bone font-bold">HYLST - GEOFFROY</span> (AVEC IA) <span className="animate-blink text-ember">●</span>
+          <div className="mb-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-arcade text-[0.55rem] sm:text-[0.65rem] text-rust tracking-wider">
+            <span className="hidden sm:inline animate-blink text-ember">●</span>
+            <span className="whitespace-nowrap">UNE CRÉATION DE</span>
+            <span className="whitespace-nowrap text-bone font-bold">HYLST - GEOFFROY</span>
+            <span className="whitespace-nowrap">(AVEC IA)</span>
+            <span className="hidden sm:inline animate-blink text-ember">●</span>
           </div>
           <h1 className="text-flame text-flame-anim font-arcade leading-[1.3] text-3xl sm:text-5xl md:text-6xl tracking-tight">
             DÉMOLITION
@@ -231,16 +235,16 @@ export default function App() {
               Bouton dédié Plein Écran pour agrandir l'arène de combat et profiter du gameplay en temps réel avec une visibilité et une immersion maximales.
             </FeatureCard>
             <FeatureCard icon="🌋" title="4 CIRCUITS UNIQUES">
-              Affrontez vos rivaux sur La Fosse de Terre, L'Usine Toxique, Le Dépôt Glacé ou Le Cratère en Feu, chacun avec sa propre météo et friction de sol.
+              Affrontez vos rivaux sur La Fosse de Terre, L'Usine Toxique, Le Dépôt Glacé ou Le Cratère en Feu, chacun avec sa propre adhérence et son ambiance.
             </FeatureCard>
             <FeatureCard icon="🤖" title="IA PERSONNALISÉES">
-              7 pilotes IA aux comportements distincts : le Kamikaze qui fonce en turbo, le Scavenger qui cherche les caisses, ou le Tank qui garde le centre.
+              7 pilotes IA aux profils variés : le Kamikaze qui fonce en turbo, le Scavenger qui cherche les caisses, ou le Tank lourd et blindé.
             </FeatureCard>
             <FeatureCard icon="💥" title="BARILS EXPLOSIFS">
-              Des bidons hautement inflammables peuplent désormais l'arène. Percutez-les pour déclencher une onde de choc qui souffle les voitures !
+              Des bidons hautement inflammables peuplent l'arène. Percutez-les pour déclencher une onde de choc qui souffle les voitures !
             </FeatureCard>
             <FeatureCard icon="⚡" title="TURBO & CAISSES">
-              Injectez du Nitro (MAJ) et récupérez des caisses tombées du ciel : Réparation (🔧), Bouclier Invincible (🛡️), ou Roues Dégâts X2 (💥).
+              Injectez du Nitro (MAJ) et récupérez des caisses tombées du ciel : Nitro (⚡), Réparation (🔧), Bouclier Invincible (🛡️) ou Roues Dégâts X2 (💥).
             </FeatureCard>
             <FeatureCard icon="🏎️" title="MODES DE COMPÉTITION">
               Variété absolue : Carnage Survie (le dernier en vie gagne), Match à Mort 3 minutes (max d'éliminations), ou Grand Championnat sur 4 manches.

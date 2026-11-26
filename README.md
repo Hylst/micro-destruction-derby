@@ -2,7 +2,7 @@
 
 **Derby de démolition en vue de dessus, quatre arènes et huit bolides.**
 
-Démolition Derby est un jeu d'arcade rétro inspiré des bornes de la fin des années 80. Le joueur choisit un bolide, une arène et un mode, puis affronte sept pilotes contrôlés par l'IA. Les dégâts sont permanents, le turbo et le dérapage se gèrent au dixième de seconde, et quatre environnements changent l'adhérence.
+Démolition Derby est un jeu d'arcade rétro inspiré des bornes de la fin des années 80. Le joueur choisit un bolide, une arène et un mode, puis affronte sept pilotes contrôlés par l'IA. Les dégâts de collision s'accumulent, le turbo et le dérapage se gèrent en temps réel, et quatre environnements changent l'adhérence.
 
 Joue ici : [games.hylst.fr/micro-destruction-derby/](https://games.hylst.fr/micro-destruction-derby/)
 
@@ -26,7 +26,8 @@ Illustration de présentation générée par IA.
 - Quatre arènes : fosse de terre, usine toxique, dépôt glacé et cratère en feu.
 - Huit bolides aux caractéristiques distinctes.
 - Trois modes : Carnage Survie, Championnat en quatre manches et Match à mort.
-- Dégâts permanents, nitro, dérapage et sept pilotes IA.
+- Dégâts de collision, nitro, dérapage et sept pilotes IA.
+- Championnat en quatre manches avec score cumulé.
 - Direction assistée par canvas, rendu rétro et effets sonores synthétisés.
 - Commandes tactiles pendant la partie.
 - Aucune donnée conservée dans le navigateur.

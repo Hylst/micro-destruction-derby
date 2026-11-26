@@ -73,7 +73,7 @@ export default function InteractiveDerbyGame() {
   const selectedCarIdxRef = useRef<number>(0);
   const gameModeRef = useRef<GameMode>("SURVIVAL");
   const champRoundIdxRef = useRef<number>(0);
-  const sessionInitRef = useRef<((isRealGame: boolean) => void) | null>(null);
+  const sessionInitRef = useRef<((isRealGame: boolean, preserveProgress?: boolean) => void) | null>(null);
 
   const updateGameState = (newSt: GameState) => {
     gameStateRef.current = newSt;
@@ -191,16 +191,31 @@ export default function InteractiveDerbyGame() {
     };
 
     const addText = (x: number, y: number, text: string, color: string = "#ffd23f", scale: number = 1) => {
+      // Le mode attract est une demonstration : les messages de combat
+      // passeraient derriere le panneau « Inserez une piece ».
+      if (gameStateRef.current === "ATTRACT") return;
+      // Un seul message identique a la fois : trois eliminations simultanees
+      // empilaient trois fois le meme texte au meme endroit.
+      if (floatingTexts.some((t) => t.text === text && t.life > t.maxLife * 0.5)) return;
+      // Place le message au-dessus des messages proches deja affiches,
+      // avec au moins 34 px d'ecart vertical.
+      let textY = y - 14;
+      for (let lane = 0; lane < 6; lane += 1) {
+        const close = floatingTexts.some((t) => Math.abs(t.x - x) < 150 && Math.abs(t.y - textY) < 34);
+        if (!close) break;
+        textY -= 34;
+      }
       floatingTexts.push({
         id: nextTextId.current++,
-        x: x + (Math.random() - 0.5) * 16,
-        y: y - 14,
+        x: x + (Math.random() - 0.5) * 10,
+        y: Math.max(24, textY),
         text,
         color,
         life: 1.3,
         maxLife: 1.3,
         scale,
       });
+      if (floatingTexts.length > 10) floatingTexts.shift();
     };
 
     const addParticle = (x: number, y: number, type: Particle["type"], count: number, pSpeed: number = 2.5, col?: string) => {
@@ -371,22 +386,26 @@ export default function InteractiveDerbyGame() {
       }
     };
 
-    const initSession = (isRealGame: boolean) => {
+    const initSession = (isRealGame: boolean, preserveProgress = false) => {
       cars = [];
       items = [];
       particles = [];
       tracks = [];
       floatingTexts = [];
-      scoreRef.current = 0;
-      killsRef.current = 0;
+      if (!preserveProgress) {
+        scoreRef.current = 0;
+        killsRef.current = 0;
+      }
       deathmatchSecondsRef.current = 180;
 
       const currentArena = selectedArenaIdRef.current;
       setupObstacles(currentArena);
 
       if (isRealGame) {
-        setPlayerScore(0);
-        setPlayerKills(0);
+        if (!preserveProgress) {
+          setPlayerScore(0);
+          setPlayerKills(0);
+        }
         setPlayerHp(100);
         setPlayerNitro(100);
         setAliveEnemiesCount(7);
@@ -409,6 +428,7 @@ export default function InteractiveDerbyGame() {
 
     sessionInitRef.current = initSession;
     initSession(gameStateRef.current === "PLAYING" || gameStateRef.current === "COUNTDOWN");
+
 
     let lastTime = performance.now();
     let crateTimer = 0;
@@ -1120,14 +1140,14 @@ export default function InteractiveDerbyGame() {
 
   const nextChampionshipRound = () => {
     audioEngine.playSelect();
-    const nextIdx = champRoundIdx + 1;
+    const nextIdx = champRoundIdxRef.current + 1;
     setChampRoundIdx(nextIdx);
     champRoundIdxRef.current = nextIdx;
     const list: ArenaId[] = ["DIRT", "TOXIC", "ICE", "FIRE"];
     const nextArena = list[nextIdx];
     setSelectedArenaId(nextArena);
     selectedArenaIdRef.current = nextArena;
-    sessionInitRef.current?.(true);
+    sessionInitRef.current?.(true, true);
     updateGameState("COUNTDOWN");
   };
 
@@ -1146,8 +1166,8 @@ export default function InteractiveDerbyGame() {
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border-b-2 border-rust/40 px-2 pb-3">
         <div className="flex items-center gap-2">
           <span className="h-3.5 w-3.5 rounded-full bg-toxic animate-led" />
-          <span className="font-arcade text-xs text-bone tracking-wider">
-            IA ASSIST : <strong className="text-ember font-bold">HYLST - GEOFFROY</strong>
+          <span className="font-arcade text-[0.6rem] sm:text-xs text-bone tracking-wider">
+            <strong className="text-ember font-bold">HYLST - GEOFFROY</strong> · CRÉATION ASSISTÉE PAR IA
           </span>
         </div>
 
@@ -1246,7 +1266,7 @@ export default function InteractiveDerbyGame() {
         {gameState === "ARENA_SELECT" && (
           <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-center gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <h2 className="font-arcade text-2xl text-flame mb-2 animate-pulse">SÉLECTION DE L'ARÈNE</h2>
-            <p className="font-term text-lg text-bone-dim mb-8">Chaque circuit possède sa propre météo et adhérence</p>
+            <p className="font-term text-lg text-bone-dim mb-8">Chaque circuit possède sa propre adhérence et son ambiance</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
               {Object.values(ARENA_ROSTER).map((info) => (

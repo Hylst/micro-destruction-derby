@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 1.0.2 - 2026-11-26
+
+- Championnat : le score et les éliminations sont conservés d'une manche à l'autre. Le texte « score cumulé actuel » était contredit par une remise à zéro à chaque manche.
+- Mode attract : les messages de combat ne s'affichent plus derrière le panneau « Insérez une pièce ».
+- Messages flottants : les doublons sont fusionnés et les messages proches sont espacés de 34 px pour rester lisibles.
+- Textes et métadonnées : suppression de « pixel art », « 16-bit », « dégâts permanents », « IA ASSIST » et de la météo annoncée pour tous les circuits ; Nitro ajouté à la liste des caisses. L'illustration de présentation reste annoncée comme générée par IA.
+- Images : nouvelle image Open Graph avec une vraie capture de jeu ; capture de documentation et vignette rafraîchies.
+- Mobile : en-tête replié proprement, textes du bandeau lisibles.
+
 ## 1.0.1 - 2026-11-26
 
 - Commandes du joueur : la voiture est maintenant créée au lancement de la partie. Sans cela, la boucle pilotait huit IA et aucune commande ne répondait.
