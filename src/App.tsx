@@ -241,7 +241,7 @@ export default function App() {
               7 pilotes IA aux profils variés : le Kamikaze qui fonce en turbo, le Scavenger qui cherche les caisses, ou le Tank lourd et blindé.
             </FeatureCard>
             <FeatureCard icon="💥" title="BARILS EXPLOSIFS">
-              Des bidons hautement inflammables peuplent l'arène. Percutez-les pour déclencher une onde de choc qui souffle les voitures !
+              Des bidons hautement inflammables sont disposés dans plusieurs arènes. Percutez-les pour déclencher une onde de choc qui souffle les voitures !
             </FeatureCard>
             <FeatureCard icon="⚡" title="TURBO & CAISSES">
               Injectez du Nitro (MAJ) et récupérez des caisses tombées du ciel : Nitro (⚡), Réparation (🔧), Bouclier Invincible (🛡️) ou Roues Dégâts X2 (💥).

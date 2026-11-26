@@ -24,11 +24,12 @@ Illustration de présentation générée par IA.
 ## Fonctionnalités
 
 - Quatre arènes : fosse de terre, usine toxique, dépôt glacé et cratère en feu.
+- Barils explosifs dans trois arènes, plaques de glace dans le dépôt glacé.
 - Huit bolides aux caractéristiques distinctes.
 - Trois modes : Carnage Survie, Championnat en quatre manches et Match à mort.
 - Dégâts de collision, nitro, dérapage et sept pilotes IA.
 - Championnat en quatre manches avec score cumulé.
-- Direction assistée par canvas, rendu rétro et effets sonores synthétisés.
+- Rendu Canvas 2D, esthétique rétro et effets sonores synthétisés.
 - Commandes tactiles pendant la partie.
 - Aucune donnée conservée dans le navigateur.
 

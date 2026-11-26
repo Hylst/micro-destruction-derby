@@ -1,5 +1,11 @@
 # Journal des modifications
 
+## 1.0.3 - 2026-11-27
+
+- Arènes : l'Usine Toxique n'annonce plus de flaques toxiques absentes et le Cratère en Feu n'annonce plus de bumpers repousseurs. Le Cratère annonce ses quatre barils explosifs.
+- Carte des barils : le texte précise que les bidons sont disposés dans plusieurs arènes, pas dans toutes.
+- README : la ligne « direction assistée par canvas » devient « rendu Canvas 2D, esthétique rétro et effets sonores synthétisés ».
+
 ## 1.0.2 - 2026-11-26
 
 - Championnat : le score et les éliminations sont conservés d'une manche à l'autre. Le texte « score cumulé actuel » était contredit par une remise à zéro à chaque manche.
