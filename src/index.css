@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+@theme {
+  --font-arcade: "Press Start 2P", ui-monospace, monospace;
+  --font-term: "VT323", ui-monospace, monospace;
+
+  --color-asphalt: #14110c;
+  --color-asphalt-2: #1d1810;
+  --color-panel: #241d13;
+  --color-panel-2: #2f2618;
+  --color-dirt: #4a3623;
+  --color-rust: #b5501e;
+  --color-ember: #f59e0b;
+  --color-flame: #ff6a00;
+  --color-steel: #7b8794;
+  --color-bone: #ece4d4;
+  --color-bone-dim: #b3a692;
+  --color-toxic: #9bc24a;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 50% -10%, #2a2014 0%, #14110c 55%, #0a0805 100%);
+  background-attachment: fixed;
+  color: var(--color-bone);
+  font-family: var(--font-term);
+  font-size: 18px;
+  -webkit-font-smoothing: none;
+  text-rendering: optimizeSpeed;
+}
+
+::selection {
+  background: var(--color-flame);
+  color: #000;
+}
+
+/* ---------- helpers ---------- */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.text-shadow-hard {
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* fiery blocky title */
+.text-flame {
+  color: #ffd23f;
+  text-shadow:
+    0 0 4px #ff8a00,
+    0 0 12px #ff5a00,
+    3px 3px 0 #7a1d00,
+    6px 6px 0 rgba(0, 0, 0, 0.65);
+}
+
+.text-flame-anim {
+  animation: flame 2.6s ease-in-out infinite;
+}
+
+@keyframes flame {
+  0%,
+  100% {
+    text-shadow:
+      0 0 4px #ff8a00,
+      0 0 12px #ff5a00,
+      3px 3px 0 #7a1d00,
+      6px 6px 0 rgba(0, 0, 0, 0.65);
+  }
+  45% {
+    text-shadow:
+      0 0 6px #ffb01e,
+      0 0 22px #ff6a00,
+      3px 3px 0 #7a1d00,
+      6px 6px 0 rgba(0, 0, 0, 0.65);
+  }
+  70% {
+    text-shadow:
+      0 0 3px #ff7300,
+      0 0 9px #ff4a00,
+      3px 3px 0 #7a1d00,
+      6px 6px 0 rgba(0, 0, 0, 0.65);
+  }
+}
+
+/* ---------- CRT screen ---------- */
+.crt-screen {
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    inset 0 0 30px rgba(0, 0, 0, 0.9),
+    inset 0 0 120px rgba(0, 0, 0, 0.55);
+}
+
+.crt-screen::after {
+  /* scanlines */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.28) 3px,
+    rgba(0, 0, 0, 0.28) 3px
+  );
+  background-size: 100% 4px;
+  mix-blend-mode: multiply;
+  z-index: 30;
+}
+
+.crt-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0) 55%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  z-index: 31;
+}
+
+.crt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.04) 18%,
+    rgba(255, 255, 255, 0) 38%
+  );
+  z-index: 32;
+}
+
+.crt-flicker {
+  animation: crtflicker 5.5s steps(60) infinite;
+}
+
+@keyframes crtflicker {
+  0%,
+  96%,
+  100% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.82;
+  }
+  98% {
+    opacity: 0.95;
+  }
+  99% {
+    opacity: 0.78;
+  }
+}
+
+/* ---------- arcade animations ---------- */
+.animate-blink {
+  animation: blink 1.05s steps(2, start) infinite;
+}
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.12;
+  }
+}
+
+.animate-marquee {
+  animation: marquee 26s linear infinite;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-led {
+  animation: ledpulse 1.6s ease-in-out infinite;
+}
+@keyframes ledpulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 2px rgba(155, 194, 74, 0.7);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 2px 0 rgba(155, 194, 74, 0.3);
+    opacity: 0.55;
+  }
+}
+
+.animate-rise {
+  animation: rise 3.4s ease-in-out infinite;
+}
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-26px) scale(1.6);
+    opacity: 0;
+  }
+}
+
+.animate-pixel-bob {
+  animation: pixelbob 0.5s steps(2) infinite;
+}
+@keyframes pixelbob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- arcade keycap ---------- */
+.keycap {
+  display: inline-flex;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  background: linear-gradient(#4a4034, #2a2318);
+  border: 2px solid #5b4f3c;
+  box-shadow:
+    0 3px 0 #181208,
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  color: var(--color-ember);
+  font-family: var(--font-arcade);
+  font-size: 0.7rem;
+}
+
+/* ---------- panels ---------- */
+.bezel {
+  background: linear-gradient(#2b2418, #181208);
+  border: 3px solid #3a3022;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -3px 12px rgba(0, 0, 0, 0.6),
+    0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.rivet {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #6b5e44, #2a2316);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+/* chunky pixel divider */
+.pixel-rule {
+  height: 4px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--color-rust) 0 8px,
+    transparent 8px 16px
+  );
+  opacity: 0.7;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #14110c;
+}
+::-webkit-scrollbar-thumb {
+  background: #4a3623;
+  border: 2px solid #14110c;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rust);
+}
+
+/* Commandes tactiles du derby */
+.derby-touch { display: none; }
+@media (max-width: 900px), (pointer: coarse) {
+  .derby-touch { display: flex; }
+}
+.derby-pad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 52px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 10px;
+  background: rgba(20, 17, 12, 0.82);
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  line-height: 1;
+  touch-action: none;
+  user-select: none;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+}
+.derby-pad-wide { padding: 0 10px; font-size: 8px; }
+.derby-pad:active { transform: scale(0.94); filter: brightness(1.4); }
