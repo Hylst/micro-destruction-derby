@@ -70,6 +70,10 @@ export default function InteractiveDerbyGame() {
   const killsRef = useRef<number>(0);
   const screenShakeRef = useRef<{ x: number; y: number; timer: number }>({ x: 0, y: 0, timer: 0 });
   const deathmatchSecondsRef = useRef<number>(180);
+  const selectedCarIdxRef = useRef<number>(0);
+  const gameModeRef = useRef<GameMode>("SURVIVAL");
+  const champRoundIdxRef = useRef<number>(0);
+  const sessionInitRef = useRef<((isRealGame: boolean) => void) | null>(null);
 
   const updateGameState = (newSt: GameState) => {
     gameStateRef.current = newSt;
@@ -383,11 +387,14 @@ export default function InteractiveDerbyGame() {
       if (isRealGame) {
         setPlayerScore(0);
         setPlayerKills(0);
+        setPlayerHp(100);
+        setPlayerNitro(100);
         setAliveEnemiesCount(7);
+        const playerIdx = selectedCarIdxRef.current;
         // Joueur
-        cars.push(spawnCar(0, selectedCarIdx, true));
+        cars.push(spawnCar(0, playerIdx, true));
         // 7 IA
-        const aiSpecs = [0, 1, 2, 3, 4, 5, 6, 7].filter((n) => n !== selectedCarIdx);
+        const aiSpecs = [0, 1, 2, 3, 4, 5, 6, 7].filter((n) => n !== playerIdx);
         for (let i = 1; i <= 7; i++) {
           const specIdx = aiSpecs[(i - 1) % aiSpecs.length];
           cars.push(spawnCar(i, specIdx, false));
@@ -400,6 +407,7 @@ export default function InteractiveDerbyGame() {
       }
     };
 
+    sessionInitRef.current = initSession;
     initSession(gameStateRef.current === "PLAYING" || gameStateRef.current === "COUNTDOWN");
 
     let lastTime = performance.now();
@@ -445,7 +453,7 @@ export default function InteractiveDerbyGame() {
         }
 
         // Décompte Time Attack Deathmatch
-        if (currentSt === "PLAYING" && gameMode === "DEATHMATCH") {
+        if (currentSt === "PLAYING" && gameModeRef.current === "DEATHMATCH") {
           deathmatchSecondsRef.current -= (dt * 16.667) / 1000;
           const sec = Math.max(0, Math.ceil(deathmatchSecondsRef.current));
           const mins = Math.floor(sec / 60);
@@ -472,7 +480,7 @@ export default function InteractiveDerbyGame() {
         // --- MISE À JOUR DES BOLIDES ---
         for (const car of cars) {
           if (!car.alive) {
-            if (currentSt === "ATTRACT" || (currentSt === "PLAYING" && gameMode === "DEATHMATCH")) {
+            if (currentSt === "ATTRACT" || (currentSt === "PLAYING" && gameModeRef.current === "DEATHMATCH")) {
               car.respawnTimer -= (dt * 16.667) / 1000;
               if (car.respawnTimer <= 0) {
                 // Réapparition en pleine forme
@@ -821,7 +829,7 @@ export default function InteractiveDerbyGame() {
             addParticle(car.x, car.y, "DEBRIS", 15, 6, car.specs.body);
             addText(car.x, car.y, "☠️ BOLIDE DÉTRUIT !", "#ff3300", 1.3);
 
-            if (currentSt === "ATTRACT" || (currentSt === "PLAYING" && gameMode === "DEATHMATCH")) {
+            if (currentSt === "ATTRACT" || (currentSt === "PLAYING" && gameModeRef.current === "DEATHMATCH")) {
               car.respawnTimer = 4.0; // Réapparaît 4s plus tard en Time Attack ou Attract
             } else if (currentSt === "PLAYING") {
               if (car.isPlayer) {
@@ -844,8 +852,8 @@ export default function InteractiveDerbyGame() {
                   scoreRef.current += 2500;
                   setPlayerScore(scoreRef.current);
 
-                  if (gameMode === "CHAMPIONSHIP") {
-                    if (champRoundIdx < 3) {
+                  if (gameModeRef.current === "CHAMPIONSHIP") {
+                    if (champRoundIdxRef.current < 3) {
                       setTimeout(() => updateGameState("ROUND_OVER"), 1500);
                     } else {
                       setFinalStatus("VICTORY");
@@ -1056,7 +1064,10 @@ export default function InteractiveDerbyGame() {
     };
 
     animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
+    return () => {
+      cancelAnimationFrame(animId);
+      sessionInitRef.current = null;
+    };
   }, []);
 
   // Décompte visuel 3 2 1 GO
@@ -1080,7 +1091,9 @@ export default function InteractiveDerbyGame() {
   const handleSelectMode = (mode: GameMode) => {
     audioEngine.playSelect();
     setGameMode(mode);
+    gameModeRef.current = mode;
     setChampRoundIdx(0);
+    champRoundIdxRef.current = 0;
 
     if (mode === "CHAMPIONSHIP") {
       // Le championnat impose les arènes dans l'ordre
@@ -1101,6 +1114,7 @@ export default function InteractiveDerbyGame() {
 
   const confirmCarSelection = () => {
     audioEngine.playSelect();
+    sessionInitRef.current?.(true);
     updateGameState("COUNTDOWN");
   };
 
@@ -1108,10 +1122,12 @@ export default function InteractiveDerbyGame() {
     audioEngine.playSelect();
     const nextIdx = champRoundIdx + 1;
     setChampRoundIdx(nextIdx);
+    champRoundIdxRef.current = nextIdx;
     const list: ArenaId[] = ["DIRT", "TOXIC", "ICE", "FIRE"];
     const nextArena = list[nextIdx];
     setSelectedArenaId(nextArena);
     selectedArenaIdRef.current = nextArena;
+    sessionInitRef.current?.(true);
     updateGameState("COUNTDOWN");
   };
 
@@ -1195,15 +1211,15 @@ export default function InteractiveDerbyGame() {
             </div>
 
             <div className="flex w-full justify-between px-4 font-arcade text-[0.65rem] text-bone-dim">
-              <span>BORNE 16-BIT ULTRA 60FPS</span>
-              <span>© 199X CASSE-PIXEL</span>
+              <span>BORNE ARCADE TEMPS RÉEL</span>
+              <span>© 2026 HYLST</span>
             </div>
           </div>
         )}
 
         {/* 2. CHOIX DU MODE DE JEU */}
         {gameState === "MODE_SELECT" && (
-          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-center gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <h2 className="font-arcade text-2xl text-flame mb-2 animate-pulse">CHOIX DU MODE DE JEU</h2>
             <p className="font-term text-lg text-bone-dim mb-8">Sélectionnez votre type de compétition d'arcade</p>
 
@@ -1228,7 +1244,7 @@ export default function InteractiveDerbyGame() {
 
         {/* 3. CHOIX DU CIRCUIT ARENA_SELECT */}
         {gameState === "ARENA_SELECT" && (
-          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-center gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <h2 className="font-arcade text-2xl text-flame mb-2 animate-pulse">SÉLECTION DE L'ARÈNE</h2>
             <p className="font-term text-lg text-bone-dim mb-8">Chaque circuit possède sa propre météo et adhérence</p>
 
@@ -1252,7 +1268,7 @@ export default function InteractiveDerbyGame() {
 
         {/* 4. CHOIX DU BOLIDE SELECT */}
         {gameState === "SELECT" && (
-          <div className="absolute inset-0 z-40 flex flex-col items-center justify-between bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-between gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <div className="text-center">
               <h2 className="font-arcade text-xl sm:text-2xl text-flame animate-pulse">SÉLECTION DU PILOTE</h2>
               <p className="font-term text-lg text-bone-dim mt-1">Circuit actif : <strong className="text-toxic">{ARENA_ROSTER[selectedArenaId].name}</strong></p>
@@ -1265,7 +1281,7 @@ export default function InteractiveDerbyGame() {
                 return (
                   <button
                     key={specs.id}
-                    onClick={() => { setSelectedCarIdx(idx); audioEngine.playSelect(); }}
+                    onClick={() => { setSelectedCarIdx(idx); selectedCarIdxRef.current = idx; audioEngine.playSelect(); }}
                     className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl border-4 transition cursor-pointer ${
                       isSelected ? "border-flame bg-panel-2 shadow-[0_0_20px_rgba(255,106,0,0.85)] transform scale-105" : "border-panel bg-asphalt hover:border-steel/60"
                     }`}
@@ -1447,7 +1463,7 @@ export default function InteractiveDerbyGame() {
 
         {/* 7. RECAPITULATIF FIN DE MANCHE CHAMPIONNAT ROUND_OVER */}
         {gameState === "ROUND_OVER" && (
-          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-center gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <h2 className="font-arcade text-3xl sm:text-4xl text-toxic animate-pulse mb-2">MANCHE {champRoundIdx + 1} TERMINÉE !</h2>
             <p className="font-term text-xl text-bone-dim mb-6">Préparez-vous pour le circuit suivant</p>
 
@@ -1467,7 +1483,7 @@ export default function InteractiveDerbyGame() {
 
         {/* 8. ÉCRAN DE FIN DE JEU GAMEOVER */}
         {gameState === "GAMEOVER" && (
-          <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
+          <div className="absolute inset-0 z-40 flex flex-col items-center justify-start sm:justify-center gap-4 overflow-y-auto bg-asphalt-2/95 p-6 text-bone animate-fadeIn">
             <div className="text-center">
               <h2 className={`font-arcade text-3xl sm:text-5xl ${
                 finalStatus === "VICTORY" ? "text-toxic animate-pulse text-shadow-hard" : "text-rust"

@@ -37,27 +37,6 @@ function PixelCar({
   );
 }
 
-function StatBox({
-  label,
-  value,
-  accent = "text-ember",
-}: {
-  label: string;
-  value: string;
-  accent?: string;
-}) {
-  return (
-    <div className="flex-1 border-2 border-panel-2 bg-asphalt px-3 py-2 text-center rounded-lg shadow-inner">
-      <div className="font-arcade text-[0.5rem] leading-none text-bone-dim">
-        {label}
-      </div>
-      <div className={`mt-1.5 font-arcade text-[0.8rem] leading-none ${accent}`}>
-        {value}
-      </div>
-    </div>
-  );
-}
-
 function FeatureCard({
   icon,
   title,
@@ -100,9 +79,9 @@ function KeyRow({ keys, action }: { keys: string[]; action: string }) {
 const MARQUEE = [
   "★ CRÉATEUR : HYLST & GEOFFROY",
   "AVEC L'AIDE D'UNE IA",
-  "NOUVEAU SYSTÈME AUDIO CHIPTUNE",
+  "AUDIO SYNTHÉTISÉ WEB AUDIO",
   "BOLIDES 100% JOUABLES",
-  "DÉGÂTS PERMANENTS",
+  "DÉGÂTS DE COLLISION",
   "BIENVENUE DANS LA CASSE",
 ];
 
@@ -166,10 +145,10 @@ export default function App() {
         <section className="mt-12">
           <div className="text-center mb-6">
             <div className="inline-block bg-toxic/20 border-2 border-toxic text-toxic font-arcade text-xs px-4 py-1.5 rounded-full mb-2 shadow-[0_0_12px_rgba(155,194,74,0.4)] animate-pulse">
-              NOUVEAU MODE INTERACTIF 60 FPS
+              MODE INTERACTIF TEMPS RÉEL
             </div>
             <h2 className="font-arcade text-xl sm:text-2xl text-bone">
-              BORNE D'ARCADE OFFICIELLE
+              BORNE D'ARCADE VIRTUELLE
             </h2>
             <p className="font-term text-lg text-bone-dim mt-1">
               Insérez une pièce, choisissez votre bolide et détruisez les 7 pilotes IA !
@@ -187,26 +166,17 @@ export default function App() {
         <section className="grid grid-cols-1 gap-8 lg:grid-cols-12 items-center">
           <div className="lg:col-span-7">
             <div className="bezel p-3 sm:p-5 rounded-2xl shadow-2xl border-4 border-panel-2">
-              <div className="mb-3 flex items-center justify-between px-2">
-                <span className="font-arcade text-[0.6rem] text-bone-dim">ILLUSTRATION PIXEL ART ORIGINALE</span>
-                <span className="font-arcade text-[0.6rem] text-rust">16-BIT RETRO CRT</span>
+              <div className="mb-3 px-2">
+                <span className="font-arcade text-[0.6rem] text-bone-dim">ILLUSTRATION GÉNÉRÉE PAR IA</span>
               </div>
 
-              <div className="crt-screen crt-flicker rounded-xl overflow-hidden border-2 border-panel">
+              <div className="rounded-xl overflow-hidden border-2 border-panel">
                 <img
                   src={heroImg}
-                  alt="Vue de haut en pixel art du jeu Démolition Derby : arène de terre entourée de pneus broyés avec des petites voitures qui se percutent."
-                  className="pixelated block w-full hover:scale-105 transition-transform duration-700"
+                  alt="Illustration de l'arène de Démolition Derby, générée par IA : vue plongeante sur une arène de terre entourée de pneus et de voitures accidentées."
+                  className="block w-full"
                   style={{ aspectRatio: "1 / 1" }}
                 />
-                <div className="crt-vignette" />
-                <div className="crt-glare" />
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-3">
-                <StatBox label="RÉSOLUTION" value="32x32 SPRITES" />
-                <StatBox label="PALETTE" value="INDUSTRIELLE" accent="text-toxic" />
-                <StatBox label="CRÉATEURS" value="HYLST & GEOFFROY" accent="text-flame" />
               </div>
             </div>
           </div>
@@ -220,7 +190,7 @@ export default function App() {
                 Imaginé et réalisé par <span className="text-bone font-bold">Hylst - Geoffroy</span> en collaboration avec une IA, <strong className="text-ember">Démolition Derby</strong> est un hommage passionné aux jeux d'arcade mythiques des années 90.
               </p>
               <p className="mt-2 font-term text-lg leading-relaxed text-bone-dim">
-                Chaque élément visuel respecte l'esthétique des consoles 16-bit : une grille de pixels brute, des scanlines CRT cathodiques, une musique chiptune rythmée et un moteur physique de collision aux petits oignons.
+                L'illustration de présentation a été générée par IA. Le jeu utilise un rendu canvas, des effets sonores synthétisés et un moteur de collision maison.
               </p>
             </div>
 
@@ -230,7 +200,7 @@ export default function App() {
               </h3>
               <ul className="mt-3 space-y-2 font-term text-lg text-bone-dim">
                 <li className="flex items-center gap-3">
-                  <span className="text-toxic font-bold">✔</span> Synthétiseur d'ambiance Chiptune Web Audio
+                  <span className="text-toxic font-bold">✔</span> Synthétiseur d'ambiance Web Audio
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="text-toxic font-bold">✔</span> Effets sonores procéduraux (chocs, turbo, dérapages)
@@ -258,7 +228,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <FeatureCard icon="🗖" title="MODE PLEIN ÉCRAN">
-              Bouton dédié Plein Écran pour agrandir l'arène de combat et profiter du gameplay 60 FPS avec une visibilité et une immersion maximales.
+              Bouton dédié Plein Écran pour agrandir l'arène de combat et profiter du gameplay en temps réel avec une visibilité et une immersion maximales.
             </FeatureCard>
             <FeatureCard icon="🌋" title="4 CIRCUITS UNIQUES">
               Affrontez vos rivaux sur La Fosse de Terre, L'Usine Toxique, Le Dépôt Glacé ou Le Cratère en Feu, chacun avec sa propre météo et friction de sol.

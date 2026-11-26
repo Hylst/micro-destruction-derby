@@ -1,12 +1,14 @@
 # Démolition Derby
 
-**Derby de démolition en pixel art, quatre arènes et huit bolides.**
+**Derby de démolition en vue de dessus, quatre arènes et huit bolides.**
 
 Démolition Derby est un jeu d'arcade rétro inspiré des bornes de la fin des années 80. Le joueur choisit un bolide, une arène et un mode, puis affronte sept pilotes contrôlés par l'IA. Les dégâts sont permanents, le turbo et le dérapage se gèrent au dixième de seconde, et quatre environnements changent l'adhérence.
 
 Joue ici : [games.hylst.fr/micro-destruction-derby/](https://games.hylst.fr/micro-destruction-derby/)
 
 ![Démolition Derby](public/og-image.png)
+
+Illustration de présentation générée par IA.
 
 ## Contrôles
 
@@ -25,7 +27,7 @@ Joue ici : [games.hylst.fr/micro-destruction-derby/](https://games.hylst.fr/micr
 - Huit bolides aux caractéristiques distinctes.
 - Trois modes : Carnage Survie, Championnat en quatre manches et Match à mort.
 - Dégâts permanents, nitro, dérapage et sept pilotes IA.
-- Direction assistée par canvas, rendu pixel art et effets chiptune synthétisés.
+- Direction assistée par canvas, rendu rétro et effets sonores synthétisés.
 - Commandes tactiles pendant la partie.
 - Aucune donnée conservée dans le navigateur.
 
@@ -50,7 +52,7 @@ Le build sort dans `dist/` et se sert sous `/micro-destruction-derby/`.
 src/App.tsx                        présentation, sections et pied de page
 src/components/InteractiveDerbyGame.tsx  moteur, rendu, IA, HUD et tactile
 src/utils/arenas.ts                arènes et décors
-src/utils/audio.ts                 musique et effets chiptune
+src/utils/audio.ts                 musique et effets sonores synthétisés
 src/types/game.ts                  types du jeu
 ```
 
